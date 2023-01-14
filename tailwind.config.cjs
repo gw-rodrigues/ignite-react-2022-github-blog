@@ -8,11 +8,11 @@ module.exports = {
       },
 
       backgroundImage: {
-        header: 'url(/header-bg.svg)',
+        header: 'url(../assets/header-bg.svg)',
       },
 
       colors: {
-        blue: '#129e57',
+        blue: '#3294F8',
         base: {
           title: '#E7EDF4',
           subtitle: '#C4D4E3',
