@@ -34,8 +34,8 @@ export interface IBlogPostProps {
   number: number
   title: string
   body: string
-  createdAt: Date
-  updatedAt: Date
+  created_at: string
+  updated_at: string
   reactions: IBlogReactionsProps
   state: string
   locked: boolean
@@ -43,7 +43,7 @@ export interface IBlogPostProps {
 }
 
 interface IBlogPostsProps {
-  totalCount: number
+  total_count: number
   items: IBlogPostProps[]
 }
 
