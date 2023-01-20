@@ -2,7 +2,7 @@ import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { createContext } from 'use-context-selector'
 import { api } from '../lib/axios'
 
-interface IBlogUserProps {
+export interface IBlogUserProps {
   id: number
   login: string
   avatar_url: string
@@ -17,7 +17,7 @@ interface IBlogUserProps {
   created_at: string
 }
 
-interface IBlogReactionsProps {
+export interface IBlogReactionsProps {
   total_count: number
   '+1': number
   '-1': number
@@ -29,20 +29,22 @@ interface IBlogReactionsProps {
   eyes: number
 }
 
+export interface IBlogPostProps {
+  id: number
+  number: number
+  title: string
+  body: string
+  createdAt: Date
+  updatedAt: Date
+  reactions: IBlogReactionsProps
+  state: string
+  locked: boolean
+  score: number
+}
+
 interface IBlogPostsProps {
   totalCount: number
-  items: {
-    id: number
-    number: number
-    title: string
-    body: string
-    createdAt: Date
-    updatedAt: Date
-    reactions: IBlogReactionsProps
-    state: string
-    locked: boolean
-    score: number
-  }[]
+  items: IBlogPostProps[]
 }
 
 interface IBlogProps {
