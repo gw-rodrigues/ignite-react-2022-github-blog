@@ -2,28 +2,57 @@ import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { createContext } from 'use-context-selector'
 import { api } from '../lib/axios'
 
-interface IBlogProps {
-  login: string
+interface IBlogUserProps {
   id: number
+  login: string
   avatar_url: string
+  gravatar_id: string
   html_url: string
   name: string
   company: string
-  blog: string
-  location: string
   email: string
   bio: string
-  twitter_username: string
-  public_repos: number
-  public_gists: number
   followers: number
   following: number
   created_at: string
-  updated_at: string
+}
+
+interface IBlogReactionsProps {
+  total_count: number
+  '+1': number
+  '-1': number
+  laugh: number
+  hooray: number
+  confused: number
+  heart: number
+  rocket: number
+  eyes: number
+}
+
+interface IBlogPostsProps {
+  totalCount: number
+  items: {
+    id: number
+    number: number
+    title: string
+    body: string
+    createdAt: Date
+    updatedAt: Date
+    reactions: IBlogReactionsProps
+    state: string
+    locked: boolean
+    score: number
+  }[]
+}
+
+interface IBlogProps {
+  user: IBlogUserProps
+  posts: IBlogPostsProps
 }
 
 interface IBlogContextTypes {
-  userData: IBlogProps
+  data: IBlogProps
+  fetchFindUniquePost: () => Promise<void>
 }
 
 interface IBlogProviderProps {
@@ -36,23 +65,24 @@ const GITHUB_REPOSITORY = 'ignite-react-2022-github-blog'
 export const BlogContext = createContext({} as IBlogContextTypes)
 
 export function BlogProvider({ children }: IBlogProviderProps) {
-  const [userData, setUserData] = useState({} as IBlogProps)
+  const [data, setData] = useState<IBlogProps>({} as IBlogProps)
 
-  const fetchUser = useCallback(async () => {
-    const response = await api.get(`users/${GITHUB_USERNAME}`)
-    setUserData(response.data)
-  }, [])
-
-  const fetchPosts = useCallback(async () => {
-    const response = await api.get(`search/issues`, {
+  const fetchInitialData = useCallback(async () => {
+    const fetchUser = api.get(`users/${GITHUB_USERNAME}`)
+    const fetchPosts = api.get(`search/issues`, {
       params: {
         q: `repo:${GITHUB_USERNAME}/${GITHUB_REPOSITORY}`,
       },
     })
-    console.log(response.data)
+
+    await Promise.all([fetchUser, fetchPosts]).then(
+      ([{ data: user }, { data: posts }]) => {
+        setData({ user, posts })
+      },
+    )
   }, [])
 
-  const fetchFindPost = useCallback(async (query?: number) => {
+  const fetchFindUniquePost = useCallback(async (query?: number) => {
     const response = await api.get(
       `repos/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}/issues/${query}`,
     )
@@ -60,12 +90,12 @@ export function BlogProvider({ children }: IBlogProviderProps) {
   }, [])
 
   useEffect(() => {
-    fetchUser()
-  }, [])
-
-  console.log(userData)
+    fetchInitialData()
+  }, [fetchInitialData])
 
   return (
-    <BlogContext.Provider value={{ userData }}>{children}</BlogContext.Provider>
+    <BlogContext.Provider value={{ data, fetchFindUniquePost }}>
+      {children}
+    </BlogContext.Provider>
   )
 }
