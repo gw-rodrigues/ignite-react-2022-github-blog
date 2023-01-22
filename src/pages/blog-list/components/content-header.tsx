@@ -25,6 +25,8 @@ export function ContentHeader({ user }: IContentHeaderProps) {
           <a
             href={user.html_url}
             className="h-5 flex items-center gap-2 text-blue text-xs font-bold border-b border-transparent hover:border-blue transition-colors"
+            target="_blank"
+            rel="noreferrer"
           >
             <span>GITHUB</span> <ArrowSquareOut size={12} weight="bold" />
           </a>
