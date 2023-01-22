@@ -34,12 +34,14 @@ export interface IBlogPostProps {
   number: number
   title: string
   body: string
+  html_url: string
   created_at: string
   updated_at: string
   reactions: IBlogReactionsProps
   state: string
   locked: boolean
   score: number
+  user: IBlogUserProps
 }
 
 interface IBlogPostsProps {
@@ -54,7 +56,7 @@ interface IBlogProps {
 
 interface IBlogContextTypes {
   data: IBlogProps
-  fetchFindUniquePost: () => Promise<void>
+  fetchFindUniquePost: (id: string) => Promise<IBlogPostProps>
 }
 
 interface IBlogProviderProps {
@@ -69,7 +71,7 @@ export const BlogContext = createContext({} as IBlogContextTypes)
 export function BlogProvider({ children }: IBlogProviderProps) {
   const [data, setData] = useState<IBlogProps>({} as IBlogProps)
 
-  const fetchInitialData = useCallback(async () => {
+  const fetchUserAndManyPosts = useCallback(async () => {
     const fetchUser = api.get(`users/${GITHUB_USERNAME}`)
     const fetchPosts = api.get(`search/issues`, {
       params: {
@@ -84,16 +86,17 @@ export function BlogProvider({ children }: IBlogProviderProps) {
     )
   }, [])
 
-  const fetchFindUniquePost = useCallback(async (query?: number) => {
+  const fetchFindUniquePost = useCallback(async (id: string) => {
     const response = await api.get(
-      `repos/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}/issues/${query}`,
+      `repos/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}/issues/${id}`,
     )
     console.log(response.data)
+    return response.data
   }, [])
 
   useEffect(() => {
-    fetchInitialData()
-  }, [fetchInitialData])
+    fetchUserAndManyPosts()
+  }, [fetchUserAndManyPosts])
 
   return (
     <BlogContext.Provider value={{ data, fetchFindUniquePost }}>
