@@ -1,38 +1,38 @@
 import { ArrowSquareOut, CaretLeft } from 'phosphor-react'
+import { Link } from 'react-router-dom'
 import { ContentHeaderSocial } from '../../../components/Content-header-social'
+import { IBlogPostProps } from '../../../contexts/BlogContext'
 
-interface IArticleHeaderProps {
-  title: string
-}
-
-export function ArticleHeader({ title }: IArticleHeaderProps) {
+export function ArticleHeader(post: IBlogPostProps) {
   return (
     <div className="w-full h-auto min-h-[10.5rem] bg-base-profile shadow-[0px 2px 28px rgba(0,0,0,0.2)] rounded-[10px] p-8 ">
       <header className="flex flex-col gap-5">
         <div className="flex justify-between">
-          <a
-            href="/"
-            className="h-5 flex items-center gap-2 text-blue text-xs font-bold border-b border-transparent hover:border-blue transition-colors"
+          <Link
+            to="/"
+            className="flex items-center h-5 gap-2 text-xs font-bold transition-colors border-b border-transparent text-blue hover:border-blue"
           >
             <CaretLeft /> VOLTAR
-          </a>
+          </Link>
 
           <a
-            href="#"
-            className="h-5 flex items-center gap-2 text-blue text-xs font-bold border-b border-transparent hover:border-blue transition-colors"
+            href={post?.html_url}
+            className="flex items-center h-5 gap-2 text-xs font-bold transition-colors border-b border-transparent text-blue hover:border-blue"
+            target="_blank"
+            rel="noreferrer"
           >
             <span>VER NO GITHUB</span>
             <ArrowSquareOut size={12} weight="bold" />
           </a>
         </div>
 
-        <h2 className="text-2xl font-bold text-base-title">{title}</h2>
+        <h2 className="text-2xl font-bold text-base-title">{post?.title}</h2>
       </header>
 
       <ContentHeaderSocial
-        github="gw-rodrigues"
-        createdAt={new Date()}
-        comments={5}
+        github={post?.user?.login}
+        createdAt={post?.created_at}
+        comments={post.reactions?.total_count}
       />
     </div>
   )
