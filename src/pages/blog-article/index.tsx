@@ -1,63 +1,63 @@
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom'
+import { useContextSelector } from 'use-context-selector'
+
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
+
+import { BlogContext, IBlogPostProps } from '../../contexts/BlogContext'
 import { ArticleHeader } from './components/article-header'
 
-export interface IPostProps {
-  id: string
-  title: string
-  description: string
-  createdAt: Date
-}
-
 export function BlogArticle() {
-  const data = [
-    {
-      id: '1',
-      title: 'JavaScript data types and data structures',
-      description:
-        'Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in JavaScript and what properties they have. These can be used to build other data structures. Wherever possible, comparisons with other languages are drawn.',
-      createdAt: new Date(),
-    },
-    {
-      id: '2',
-      title: 'JavaScript data types and data structures',
-      description:
-        'Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in JavaScript and what properties they have. These can be used to build other data structures. Wherever possible, comparisons with other languages are drawn.',
-      createdAt: new Date(),
-    },
-    {
-      id: '3',
-      title: 'JavaScript data types and data structures',
-      description:
-        'Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in JavaScript and what properties they have. These can be used to build other data structures. Wherever possible, comparisons with other languages are drawn.',
-      createdAt: new Date(),
-    },
-    {
-      id: '4',
-      title: 'JavaScript data types and data structures',
-      description:
-        'Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in JavaScript and what properties they have. These can be used to build other data structures. Wherever possible, comparisons with other languages are drawn.',
-      createdAt: new Date(),
-    },
-    {
-      id: '5',
-      title: 'JavaScript data types and data structures',
-      description:
-        'Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in JavaScript and what properties they have. These can be used to build other data structures. Wherever possible, comparisons with other languages are drawn.',
-      createdAt: new Date(),
-    },
-    {
-      id: '6',
-      title: 'JavaScript data types and data structures',
-      description:
-        'Programming languages all have built-in data structures, but these often differ from one language to another. This article attempts to list the built-in data structures available in JavaScript and what properties they have. These can be used to build other data structures. Wherever possible, comparisons with other languages are drawn.',
-      createdAt: new Date(),
-    },
-  ]
+  const [post, setPost] = useState<IBlogPostProps>({} as IBlogPostProps)
+  const { id } = useParams()
+
+  const handleFetchFindUniquePost = useContextSelector(
+    BlogContext,
+    (context) => context.fetchFindUniquePost,
+  )
+
+  useEffect(() => {
+    if (!id) return
+    handleFetchFindUniquePost(id).then((data) => setPost(data))
+  }, [handleFetchFindUniquePost, id])
 
   return (
     <div className="flex flex-col gap-10">
-      <ArticleHeader title={data[0].title} />
+      <ArticleHeader {...post} />
 
-      <article className="px-8 pb-10">{data[0].description}</article>
+      <article className="px-8 pb-10">
+        <ReactMarkdown
+          className=" [&>p]:pb-6 [&>p>a]:block [&>p>a]:pb-1 [&>p>a]:text-blue [&>p>a]:underline  text-base text-base-text "
+          remarkPlugins={[remarkGfm]}
+          components={{
+            code({ inline, className, children }) {
+              const match = /language-(\w+)/.exec(className || '')
+              return !inline && match ? (
+                <SyntaxHighlighter
+                  style={vscDarkPlus}
+                  customStyle={{
+                    backgroundColor: '#112131',
+                    borderRadius: 3,
+                    padding: 16,
+                    fontSize: 16,
+                  }}
+                  PreTag="pre"
+                  language={match[1]}
+                >
+                  {String(children).replace(/\n$/, '')}
+                </SyntaxHighlighter>
+              ) : (
+                <code className={className}>{children}</code>
+              )
+            },
+          }}
+        >
+          {post.body}
+        </ReactMarkdown>
+      </article>
     </div>
   )
 }
