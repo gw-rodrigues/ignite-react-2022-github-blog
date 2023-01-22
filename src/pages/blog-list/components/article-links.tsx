@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { IBlogPostProps } from '../../../contexts/BlogContext'
 import { dateFormatter } from '../../../utils/formatter'
 
@@ -7,8 +8,8 @@ interface IArticleLinksProps {
 
 export function ArticleLinks({ post }: IArticleLinksProps) {
   return (
-    <a
-      href={`/post/${post.number}`}
+    <Link
+      to={`/post/${post.number}`}
       className="basis-full lg:basis-[416px] shrink-0 bg-base-post rounded-xl p-8 transition-colors border border-transparent hover:border-base-label"
     >
       <article>
@@ -24,6 +25,6 @@ export function ArticleLinks({ post }: IArticleLinksProps) {
             : post.body}
         </p>
       </article>
-    </a>
+    </Link>
   )
 }
