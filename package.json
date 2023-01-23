@@ -9,6 +9,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@hookform/resolvers": "^2.9.10",
+    "@mui/material": "^5.11.5",
     "axios": "^1.2.2",
     "date-fns": "^2.29.3",
     "localforage": "^1.10.0",
@@ -16,12 +20,14 @@
     "phosphor-react": "^1.4.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.42.1",
     "react-markdown": "^8.0.5",
     "react-router-dom": "^6.6.2",
     "react-syntax-highlighter": "^15.5.0",
     "remark-gfm": "^3.0.1",
     "scheduler": "^0.23.0",
-    "use-context-selector": "^1.4.1"
+    "use-context-selector": "^1.4.1",
+    "zod": "^3.20.2"
   },
   "devDependencies": {
     "@rocketseat/eslint-config": "^1.1.3",
