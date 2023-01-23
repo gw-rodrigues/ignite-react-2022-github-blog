@@ -29,6 +29,17 @@ export interface IBlogReactionsProps {
   eyes: number
 }
 
+export interface IBlogCommentsProps {
+  id: number
+  url: string
+  html_url: string
+  user: IBlogUserProps
+  created_at: string
+  updated_at: string
+  body: string
+  reactions: IBlogReactionsProps
+}
+
 export interface IBlogPostProps {
   id: number
   number: number
@@ -42,6 +53,8 @@ export interface IBlogPostProps {
   locked: boolean
   score: number
   user: IBlogUserProps
+  comments: number
+  comments_url: string
 }
 
 interface IBlogPostsProps {
@@ -59,6 +72,7 @@ interface IBlogContextTypes {
   searchFilterIsAtive: boolean
   fetchFindManyPosts: (query?: string) => Promise<void>
   fetchFindUniquePost: (id: string) => Promise<IBlogPostProps>
+  fetchFindManyCommentsByPost: (id: string) => Promise<IBlogCommentsProps[]>
 }
 
 interface IBlogProviderProps {
@@ -77,8 +91,6 @@ export function BlogProvider({ children }: IBlogProviderProps) {
   const fetchUser = useCallback(async () => {
     const response = await api.get(`users/${GITHUB_USERNAME}`)
     setData((prev) => ({ ...prev, user: response.data }))
-
-    console.log('fetchUser')
   }, [])
 
   const fetchFindManyPosts = useCallback(async (query?: string) => {
@@ -104,7 +116,13 @@ export function BlogProvider({ children }: IBlogProviderProps) {
     const response = await api.get(
       `repos/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}/issues/${id}`,
     )
-    console.log(response.data)
+    return response.data
+  }, [])
+
+  const fetchFindManyCommentsByPost = useCallback(async (id: string) => {
+    const response = await api.get(
+      `repos/${GITHUB_USERNAME}/${GITHUB_REPOSITORY}/issues/${id}/comments`,
+    )
     return response.data
   }, [])
 
@@ -120,6 +138,7 @@ export function BlogProvider({ children }: IBlogProviderProps) {
         searchFilterIsAtive,
         fetchFindManyPosts,
         fetchFindUniquePost,
+        fetchFindManyCommentsByPost,
       }}
     >
       {children}
