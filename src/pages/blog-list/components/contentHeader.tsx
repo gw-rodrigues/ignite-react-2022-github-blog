@@ -1,5 +1,5 @@
 import { ArrowSquareOut } from 'phosphor-react'
-import { ContentHeaderSocial } from '../../../components/Content-header-social'
+import { ContentHeaderSocial } from '../../../components/ContentHeaderSocial'
 import { IBlogUserProps } from '../../../contexts/BlogContext'
 
 interface IContentHeaderProps {

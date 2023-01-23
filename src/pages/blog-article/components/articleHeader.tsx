@@ -1,6 +1,6 @@
 import { ArrowSquareOut, CaretLeft } from 'phosphor-react'
 import { Link } from 'react-router-dom'
-import { ContentHeaderSocial } from '../../../components/Content-header-social'
+import { ContentHeaderSocial } from '../../../components/ContentHeaderSocial'
 import { IBlogPostProps } from '../../../contexts/BlogContext'
 
 export function ArticleHeader(post: IBlogPostProps) {

@@ -1,6 +1,6 @@
-import { ContentHeader } from './components/content-header'
-import { ArticleLinks } from './components/article-links'
-import { SearchArticles } from './components/search-articles'
+import { ContentHeader } from './components/contentHeader'
+import { ArticleLinks } from './components/articleLinks'
+import { SearchArticles } from './components/searchArticles'
 import { useContextSelector } from 'use-context-selector'
 import { BlogContext } from '../../contexts/BlogContext'
 

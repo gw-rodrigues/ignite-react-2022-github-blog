@@ -5,7 +5,7 @@ import { SocialReactions } from '../../components/SocialReactions'
 
 import { BlogContext, IBlogPostProps } from '../../contexts/BlogContext'
 import { useMarkdownParser } from '../../hooks/useMarkdownParser'
-import { ArticleHeader } from './components/article-header'
+import { ArticleHeader } from './components/articleHeader'
 import { ListComments } from './components/listComments'
 
 export function BlogArticle() {
