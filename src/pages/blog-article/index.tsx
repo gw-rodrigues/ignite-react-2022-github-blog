@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useContextSelector } from 'use-context-selector'
+import { SocialReactions } from '../../components/SocialReactions'
 
 import { BlogContext, IBlogPostProps } from '../../contexts/BlogContext'
 import { useMarkdownParser } from '../../hooks/useMarkdownParser'
 import { ArticleHeader } from './components/article-header'
+import { ListComments } from './components/listComments'
 
 export function BlogArticle() {
   const [post, setPost] = useState<IBlogPostProps>({} as IBlogPostProps)
@@ -26,9 +28,14 @@ export function BlogArticle() {
     <div className="flex flex-col gap-10">
       <ArticleHeader {...post} />
 
-      <article className="px-8 pb-10 text-base-text text-base">
-        {parsedBody}
+      <article className="flex flex-col px-8 pb-8 gap-6 text-base-text text-base">
+        <div>{parsedBody}</div>
+        {post.reactions && <SocialReactions {...post.reactions} />}
       </article>
+
+      {post.comments ? (
+        <ListComments postNumber={post.number} totalComments={post.comments} />
+      ) : null}
     </div>
   )
 }
