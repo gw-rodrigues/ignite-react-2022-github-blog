@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { IBlogPostProps } from '../../../contexts/BlogContext'
+import { useMarkdownParser } from '../../../hooks/useMarkdownParser'
 import { dateFormatter } from '../../../utils/formatter'
 
 interface IArticleLinksProps {
@@ -7,6 +8,10 @@ interface IArticleLinksProps {
 }
 
 export function ArticleLinks({ post }: IArticleLinksProps) {
+  const body =
+    post.body.length > 185 ? `${post.body.substring(0, 185)}...` : post.body
+  const parsedBody = useMarkdownParser(body)
+
   return (
     <Link
       to={`/post/${post.number}`}
@@ -19,11 +24,7 @@ export function ArticleLinks({ post }: IArticleLinksProps) {
             {dateFormatter(new Date(post.created_at))}
           </time>
         </header>
-        <p className="mt-5 text-base-text">
-          {post.body.length > 180
-            ? `${post.body.substring(0, 181)}...`
-            : post.body}
-        </p>
+        <div className="mt-5 text-base-text">{parsedBody}</div>
       </article>
     </Link>
   )
