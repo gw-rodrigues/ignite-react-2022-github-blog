@@ -28,7 +28,7 @@ export function BlogArticle() {
     <div className="flex flex-col gap-10">
       <ArticleHeader {...post} />
 
-      <article className="flex flex-col px-8 pb-8 gap-6 text-base-text text-base">
+      <article className="flex flex-col px-4 sm:px-8 pb-8 gap-6 text-base-text text-base">
         <div>{parsedBody}</div>
         {post.reactions && <SocialReactions {...post.reactions} />}
       </article>

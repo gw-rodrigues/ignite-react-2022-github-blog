@@ -27,7 +27,7 @@ export function ContentHeaderSocial({
   }
 
   return (
-    <div className="flex flex-wrap justify-center gap-6 mt-2 text-sm text-base-subtitle md:justify-start">
+    <div className="flex flex-wrap justify-center gap-2 md:gap-6 mt-2 text-sm text-base-subtitle md:justify-start">
       {github && (
         <div className="flex items-center gap-2">
           <GithubLogo size={18} weight="fill" className="fill-base-label" />

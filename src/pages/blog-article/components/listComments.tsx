@@ -25,7 +25,7 @@ export function ListComments({ postNumber, totalComments }: ICommentsProps) {
   }, [fetchFindManyCommentsByPost, postNumber])
 
   return (
-    <section className=" px-8 pb-10 text-base-text text-base ">
+    <section className="px-2 sm:px-8 pb-10 text-base-text text-base ">
       <div className="w-full flex justify-between">
         <h2 className="text-lg text-base-subtitle">Comentários</h2>
         <span className="text-sm text-base-span">

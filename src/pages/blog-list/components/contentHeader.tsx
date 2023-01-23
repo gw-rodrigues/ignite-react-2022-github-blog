@@ -19,8 +19,10 @@ export function ContentHeader({ user }: IContentHeaderProps) {
       </figure>
 
       <div className="flex-1 flex flex-col gap-2">
-        <header className="flex flex-col items-center md:justify-between md:flex-row">
-          <h2 className="text-2xl font-bold text-base-title">{user.name}</h2>
+        <header className="flex flex-col items-center justify-center md:justify-between md:flex-row">
+          <h2 className="text-xl sm:text-2xl font-bold text-base-title">
+            {user.name}
+          </h2>
 
           <a
             href={user.html_url}

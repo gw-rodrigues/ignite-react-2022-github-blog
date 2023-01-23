@@ -18,9 +18,11 @@ export function ArticleLinks({ post }: IArticleLinksProps) {
       className="basis-full lg:basis-[416px] shrink-0 bg-base-post rounded-xl p-8 transition-colors border border-transparent hover:border-base-label"
     >
       <article>
-        <header className="flex justify-between gap-4">
-          <h2 className="text-xl font-bold text-base-title">{post.title}</h2>
-          <time className="text-sm text-base-span">
+        <header className="flex flex-col sm:flex-row sm:justify-between gap-1 sm:gap-4">
+          <h2 className="text-lg sm:text-xl font-bold text-base-title">
+            {post.title}
+          </h2>
+          <time className="sm:basis-[100px] text-sm mt-1 text-base-span">
             {dateFormatter(new Date(post.created_at))}
           </time>
         </header>
