@@ -56,6 +56,8 @@ interface IBlogProps {
 
 interface IBlogContextTypes {
   data: IBlogProps
+  searchFilterIsAtive: boolean
+  fetchFindManyPosts: (query?: string) => Promise<void>
   fetchFindUniquePost: (id: string) => Promise<IBlogPostProps>
 }
 
@@ -70,20 +72,32 @@ export const BlogContext = createContext({} as IBlogContextTypes)
 
 export function BlogProvider({ children }: IBlogProviderProps) {
   const [data, setData] = useState<IBlogProps>({} as IBlogProps)
+  const [searchFilterIsAtive, setSearchFilterIsAtive] = useState(false)
 
-  const fetchUserAndManyPosts = useCallback(async () => {
-    const fetchUser = api.get(`users/${GITHUB_USERNAME}`)
-    const fetchPosts = api.get(`search/issues`, {
+  const fetchUser = useCallback(async () => {
+    const response = await api.get(`users/${GITHUB_USERNAME}`)
+    setData((prev) => ({ ...prev, user: response.data }))
+
+    console.log('fetchUser')
+  }, [])
+
+  const fetchFindManyPosts = useCallback(async (query?: string) => {
+    const response = await api.get(`search/issues`, {
       params: {
-        q: `repo:${GITHUB_USERNAME}/${GITHUB_REPOSITORY}`,
+        q:
+          query !== undefined
+            ? `${query} repo:${GITHUB_USERNAME}/${GITHUB_REPOSITORY}`
+            : `repo:${GITHUB_USERNAME}/${GITHUB_REPOSITORY}`,
       },
     })
 
-    await Promise.all([fetchUser, fetchPosts]).then(
-      ([{ data: user }, { data: posts }]) => {
-        setData({ user, posts })
-      },
-    )
+    setData((prev) => ({ ...prev, posts: response.data }))
+
+    if (query !== undefined) {
+      setSearchFilterIsAtive(true)
+    } else {
+      setSearchFilterIsAtive(false)
+    }
   }, [])
 
   const fetchFindUniquePost = useCallback(async (id: string) => {
@@ -95,11 +109,19 @@ export function BlogProvider({ children }: IBlogProviderProps) {
   }, [])
 
   useEffect(() => {
-    fetchUserAndManyPosts()
-  }, [fetchUserAndManyPosts])
+    fetchUser()
+    fetchFindManyPosts()
+  }, [fetchUser, fetchFindManyPosts])
 
   return (
-    <BlogContext.Provider value={{ data, fetchFindUniquePost }}>
+    <BlogContext.Provider
+      value={{
+        data,
+        searchFilterIsAtive,
+        fetchFindManyPosts,
+        fetchFindUniquePost,
+      }}
+    >
       {children}
     </BlogContext.Provider>
   )
