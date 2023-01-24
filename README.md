@@ -1,4 +1,4 @@
-![header](./.github/header3.png)
+![header](./.github/header.png)
 
 ![demo](./.github/demo.png)
 
